@@ -21,20 +21,11 @@ function Main({
    const [cards, setCards] = useState([]);
 
    useEffect(() => {
-      api.getUserInfo()
-         .then(userInfo => {
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
+         .then(([userInfo, initialCards]) => {
             setUserName(userInfo.name);
             setUserDescription(userInfo.about);
             setUserAvatar(userInfo.avatar);
-         })
-         .catch(error => {
-            console.log(error);
-         });
-   }, []);
-
-   useEffect(() => {
-      api.getInitialCards()
-         .then(initialCards => {
             setCards(initialCards);
          })
          .catch(error => {
@@ -66,40 +57,6 @@ function Main({
                ))}
             </ul>
          </section>
-
-         <PopupWithForm
-            name="edit"
-            title="Редактировать профиль"
-            isOpen={isEditProfilePopupOpen}
-            onClose={onClose}>
-            <input type="text" name="name" required placeholder="Имя" className="popup__input popup__input_type_name" id="name-input" minLength="2" maxLength="40" />
-            <span className="popup__input-error name-input-error"></span>
-            <input type="text" name="about" required placeholder="О себе" className="popup__input popup__input_type_about" id="about-input" minLength="2" maxLength="200" />
-            <span className="popup__input-error about-input-error"></span>
-         </PopupWithForm>
-
-         <PopupWithForm
-            name="add"
-            title="Новое место"
-            isOpen={isAddPlacePopupOpen}
-            onClose={onClose}>
-            <input type="text" name="name" required placeholder="Название" className="popup__input popup__input_type_card" id="card-input" minLength="2" maxLength="30" />
-            <span className="popup__input-error card-input-error"></span>
-            <input type="url" name="link" required placeholder="Ссылка на картинку" className="popup__input popup__input_type_url" id="url-input" />
-            <span className="popup__input-error url-input-error"></span>
-         </PopupWithForm>
-
-         <PopupWithForm
-            name="avatar"
-            title="Обновить аватар"
-            isOpen={isEditAvatarPopupOpen}
-            onClose={onClose}>
-            <input type="url" name="avatar" required placeholder="Ссылка на картинку" className="popup__input popup__input_type_avatar" id="avatar-input" />
-            <span className="popup__input-error avatar-input-error"></span>
-         </PopupWithForm>
-
-         <ImagePopup card={selectedCard} onClose={onClose} />
-
       </main>
    );
 }
