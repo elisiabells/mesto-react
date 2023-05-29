@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import CurrentUserContext from '../contexts/CurrentUserContext';
+
 import PopupWithForm from './PopupWithForm';
 import { api } from '../utils/Api';
 import Card from './Card';
@@ -15,17 +17,12 @@ function Main({
    onClose,
    selectedCard
 }) {
-   const [userName, setUserName] = useState('');
-   const [userDescription, setUserDescription] = useState('');
-   const [userAvatar, setUserAvatar] = useState('');
+   const currentUser = useContext(CurrentUserContext);
    const [cards, setCards] = useState([]);
 
    useEffect(() => {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
-         .then(([userInfo, initialCards]) => {
-            setUserName(userInfo.name);
-            setUserDescription(userInfo.about);
-            setUserAvatar(userInfo.avatar);
+      api.getInitialCards()
+         .then((initialCards) => {
             setCards(initialCards);
          })
          .catch(error => {
@@ -38,15 +35,15 @@ function Main({
          <section className="profile">
             <div
                className="profile__avatar"
-               style={{ backgroundImage: `url(${userAvatar})` }}>
+               style={{ backgroundImage: `url(${currentUser?.avatar})` }}>
             </div>
             <button type="button" className="profile__avatar-button" onClick={onEditAvatar}></button>
             <div className="profile__info">
                <div className="profile__info-title">
-                  <h1 className="profile__title">{userName}</h1>
+                  <h1 className="profile__title">{currentUser?.name}</h1>
                   <button type="button" aria-label="edit" className="profile__edit-button" onClick={onEditProfile}></button>
                </div>
-               <p className="profile__subtitle">{userDescription}</p>
+               <p className="profile__subtitle">{currentUser?.about}</p>
             </div>
             <button type="button" aria-label="add" className="profile__add-button" onClick={onAddPlace}></button>
          </section>
