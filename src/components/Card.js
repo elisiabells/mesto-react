@@ -5,8 +5,7 @@ function Card({
   card,
   onCardClick,
   onCardLike,
-  onCardDelete
-}) {
+  onCardDelete }) {
 
   const currentUser = useContext(CurrentUserContext);
 
