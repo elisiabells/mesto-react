@@ -83,9 +83,19 @@ class Api {
          method: "PATCH",
          headers: this._headers,
          body: JSON.stringify({
-             avatar: data.avatar
+            avatar: data.avatar
          })
-     })
+      })
+         .then(this._checkResponse);
+   }
+
+   // 9. Изменение статуса лайка
+   changeLike(cardId, isLiked) {
+      const method = isLiked ? 'PUT' : 'DELETE';
+      return fetch(`${this._url}/cards/likes/${cardId}`, {
+         method: method,
+         headers: this._headers,
+      })
          .then(this._checkResponse);
    }
 }
@@ -93,7 +103,7 @@ class Api {
 export const api = new Api({
    url: 'https://mesto.nomoreparties.co/v1/cohort-64',
    headers: {
-     authorization: 'f221fc97-169c-4f6c-88e9-38cc56bf9efd',
-     'Content-Type': 'application/json'
+      authorization: 'f221fc97-169c-4f6c-88e9-38cc56bf9efd',
+      'Content-Type': 'application/json'
    }
- });
+});
