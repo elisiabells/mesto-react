@@ -18,18 +18,9 @@ function App() {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    api.getUserInfo()
-      .then((userInfo) => {
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userInfo, initialCards]) => {
         setCurrentUser(userInfo);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  useEffect(() => {
-    api.getInitialCards()
-      .then((initialCards) => {
         setCards(initialCards);
       })
       .catch((err) => {
@@ -91,7 +82,7 @@ function App() {
       <div className="root">
         <div className="page">
           <Header />
-          
+
           <Main
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
