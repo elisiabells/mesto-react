@@ -8,6 +8,8 @@ import Footer from './Footer';
 
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -54,6 +56,28 @@ function App() {
       });
   };
 
+  const handleUpdateUser = (data) => {
+    api.setUserInfo(data)
+      .then((updatedUser) => {
+        setCurrentUser(updatedUser);
+        closeAllPopups();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleUpdateAvatar = (data) => {
+    api.changeAvatar(data)
+      .then((updatedUser) => {
+        setCurrentUser(updatedUser);
+        closeAllPopups();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   };
@@ -94,18 +118,11 @@ function App() {
 
           <Footer />
 
-          <PopupWithForm
-            name="edit"
-            title="Редактировать профиль"
+          <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
-            buttonText="Сохранить" >
-
-            <input type="text" name="name" required placeholder="Имя" className="popup__input popup__input_type_name" id="name-input" minLength="2" maxLength="40" />
-            <span className="popup__input-error name-input-error"></span>
-            <input type="text" name="about" required placeholder="О себе" className="popup__input popup__input_type_about" id="about-input" minLength="2" maxLength="200" />
-            <span className="popup__input-error about-input-error"></span>
-          </PopupWithForm>
+            onUpdateUser={handleUpdateUser}
+          />
 
           <PopupWithForm
             name="add"
@@ -120,16 +137,11 @@ function App() {
             <span className="popup__input-error url-input-error"></span>
           </PopupWithForm>
 
-          <PopupWithForm
-            name="avatar"
-            title="Обновить аватар"
+          <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
-            buttonText="Сохранить" >
-
-            <input type="url" name="avatar" required placeholder="Ссылка на картинку" className="popup__input popup__input_type_avatar" id="avatar-input" />
-            <span className="popup__input-error avatar-input-error"></span>
-          </PopupWithForm>
+            onUpdateAvatar={handleUpdateAvatar}
+          />
 
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 

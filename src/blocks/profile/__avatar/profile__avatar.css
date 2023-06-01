@@ -2,5 +2,6 @@
    border-radius: 50%;
    width: 127px;
    height: 127px;
-   object-fit: cover;
+   background-position: center;
+   background-size: cover;
 }
