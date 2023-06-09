@@ -13,11 +13,11 @@ function EditProfilePopup({
   const currentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && isOpen) {
       setName(currentUser.name);
       setDescription(currentUser.about);
     }
-  }, [currentUser]);
+  }, [currentUser, isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
